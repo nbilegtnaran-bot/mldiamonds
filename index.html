@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLDiamonds - Mobile Legends Diamond Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --ml-blue: #1a237e;
+            --ml-gold: #ffd700;
+            --ml-red: #d32f2f;
+            --ml-dark: #0a0e17;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--ml-dark) 0%, #1a237e 100%);
+            color: white;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        .header {
+            background: rgba(10, 14, 23, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid var(--ml-gold);
+        }
+
+        .nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--ml-gold);
+        }
+
+        .logo i {
+            color: var(--ml-red);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--ml-gold);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-login {
+            background: transparent;
+            border: 2px solid var(--ml-gold);
+            color: var(--ml-gold);
+        }
+
+        .btn-register {
+            background: var(--ml-red);
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 120px 2rem 60px;
+            text-align: center;
+            background: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80') center/cover;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 14, 23, 0.8);
+        }
+
+        .hero-content {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--ml-gold), #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        /* Diamond Packages */
+        .packages {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+            color: var(--ml-gold);
+        }
+
+        .package-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .package-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .package-card:hover {
+            border-color: var(--ml-gold);
+            transform: translateY(-10px);
+        }
+
+        .package-card.popular::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: 10px;
+            right: -30px;
+            background: var(--ml-red);
+            color: white;
+            padding: 5px 30px;
+            transform: rotate(45deg);
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .diamond-icon {
+            font-size: 3rem;
+            color: var(--ml-gold);
+            margin-bottom: 1rem;
+        }
+
+        .diamond-amount {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: var(--ml-gold);
+        }
+
+        .diamond-price {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #4caf50;
+        }
+
+        .diamond-price del {
+            color: #ff6b6b;
+            margin-right: 10px;
+        }
+
+        .btn-buy {
+            background: linear-gradient(45deg, var(--ml-red), #ff6b6b);
+            color: white;
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .btn-buy:hover {
+            background: linear-gradient(45deg, #b71c1c, var(--ml-red));
+        }
+
+        /* Features Section */
+        .features {
+            padding: 4rem 2rem;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--ml-gold);
+            margin-bottom: 1rem;
+        }
+
+        /* How to Buy */
+        .how-to-buy {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .step {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--ml-red);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-weight: bold;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--ml-dark);
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 2px solid var(--ml-gold);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--ml-gold);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .package-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <i class="fas fa-gem"></i>
+                MLDiamonds
+            </div>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#packages">Diamonds</a>
+                <a href="#features">Why Us</a>
+                <a href="#how-to-buy">How to Buy</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <div class="auth-buttons">
+                <button class="btn btn-login">Login</button>
+                <button class="btn btn-register">Register</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Mobile Legends Diamonds</h1>
+            <p>Instant Delivery • Best Prices • 24/7 Support</p>
+            <p>Get your diamonds instantly and dominate the Land of Dawn!</p>
+            <button class="btn btn-register" style="padding: 1rem 2rem; font-size: 1.2rem;">
+                Buy Diamonds Now <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- Diamond Packages -->
+    <section class="packages" id="packages">
+        <h2 class="section-title">Diamond Packages</h2>
+        <div class="package-grid">
+            <!-- Package 1 -->
+            <div class="package-card">
+                <div class="diamond-icon">
+                    <i class="fas fa-gem"></i>
+                </div>
+                <div class="diamond-amount">86 Diamonds</div>
+                <div class="diamond-price">
+                    <del>$4.99</del> $3.99
+                </div>
+                <button class="btn btn-buy">Buy Now</button>
+            </div>
+
+            <!-- Package 2 -->
+            <div class="package-card popular">
+                <div class="diamond-icon">
+                    <i class="fas fa-gem"></i>
+                </div>
+                <div class="diamond-amount">172 Diamonds</div>
+                <div class="diamond-price">
+                    <del>$9.99</del> $7.99
+                </div>
+                <button class="btn btn-buy">Buy Now</button>
+            </div>
+
+            <!-- Package 3 -->
+            <div class="package-card">
+                <div class="diamond-icon">
+                    <i class="fas fa-gem"></i>
+                </div>
+                <div class="diamond-amount">429 Diamonds</div>
+                <div class="diamond-price">
+                    <del>$24.99</del> $19.99
+                </div>
+                <button class="btn btn-buy">Buy Now</button>
+            </div>
+
+            <!-- Package 4 -->
+            <div class="package-card">
+                <div class="diamond-icon">
+                    <i class="fas fa-gem"></i>
+                </div>
+                <div class="diamond-amount">874 Diamonds</div>
+                <div class="diamond-price">
+                    <del>$49.99</del> $39.99
+                </div>
+                <button class="btn btn-buy">Buy Now</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features" id="features">
+        <h2 class="section-title">Why Choose Us?</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3>Instant Delivery</h3>
+                <p>Diamonds delivered to your account within minutes</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>100% Safe</h3>
+                <p>Secure payment and guaranteed account safety</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <h3>24/7 Support</h3>
+                <p>Round-the-clock customer support</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-tag"></i>
+                </div>
+                <h3>Best Prices</h3>
+                <p>Lowest prices with regular discounts</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How to Buy -->
+    <section class="how-to-buy" id="how-to-buy">
+        <h2 class="section-title">How to Buy</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Select Package</h3>
+                <p>Choose your diamond package</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Make Payment</h3>
+                <p>Complete secure payment</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Provide ID</h3>
+                <p>Enter your Mobile Legends ID</p>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <h3>Receive Diamonds</h3>
+                <p>Get diamonds instantly!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <div class="footer-content">
+            <div class="logo">
+                <i class="fas fa-gem"></i>
+                MLDiamonds
+            </div>
+            <p>Your trusted partner for Mobile Legends diamonds</p>
+            
+            <div class="social-links">
+                <a href="#"><i class="fab fa-whatsapp"></i></a>
+                <a href="#"><i class="fab fa-telegram"></i></a>
+                <a href="#"><i class="fab fa-discord"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+            
+            <p>&copy; 2024 MLDiamonds. Not affiliated with Moonton.</p>
+            <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 1rem;">
+                Mobile Legends: Bang Bang is a registered trademark of Moonton. This site is not officially associated with Moonton.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add to cart functionality
+        document.querySelectorAll('.btn-buy').forEach(button => {
+            button.addEventListener('click', function() {
+                const packageCard = this.closest('.package-card');
+                const amount = packageCard.querySelector('.diamond-amount').textContent;
+                const price = packageCard.querySelector('.diamond-price').textContent;
+                
+                alert(`Added to cart: ${amount} for ${price}`);
+                // Here you would typically add to cart logic
+            });
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(10, 14, 23, 0.98)';
+            } else {
+                header.style.background = 'rgba(10, 14, 23, 0.95)';
+            }
+        });
+    </script>
+</body>
+</html>
